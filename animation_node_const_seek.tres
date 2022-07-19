@@ -1,0 +1,35 @@
+[gd_resource type="AnimationNode" load_steps=2 format=2]
+
+[sub_resource type="GDScript" id=1]
+script/source = "tool
+extends AnimationNode
+
+func _init() -> void:
+	if get_input_count() <= 0:
+		add_input(\"in\")
+
+func get_caption() -> String:
+	return \"ConstSeek\"
+
+func get_parameter_list() -> Array:
+	return [{
+		name = \"seek\",
+		type = TYPE_REAL,
+		hint = PROPERTY_HINT_RANGE,
+		hint_string = \"0,3600,0.01,or_greater\",
+	}]
+
+func get_parameter_default_value(name: String):
+	match name:
+		\"seek\":
+			return 0.0
+
+	return null
+
+func process(_time: float, _seek: bool) -> void:
+	var seek_pos: float = get_parameter(\"seek\")
+	blend_input(0, seek_pos, true, 1.0, AnimationNode.FILTER_IGNORE, false)
+"
+
+[resource]
+script = SubResource( 1 )
